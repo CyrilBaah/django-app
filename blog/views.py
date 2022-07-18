@@ -1,4 +1,3 @@
-from multiprocessing import context
 from django.shortcuts import render
 from blog.forms import CommentForm
 from blog.models import Post, Comment
@@ -14,7 +13,7 @@ def blog_index(request):
 
 def blog_category(request, category):
     posts = Post.objects.filter(
-        category_name_contains=category,
+        categories__name__contains=category,
     ).order_by(
         '-created_on'
     )
@@ -42,6 +41,7 @@ def blog_detail(request, pk):
     comments = Comment.objects.filter(post=post)
     context = {
         "post": post,
-        "comments": comments
+        "comments": comments,
+        "form":form,
     }
-    return render(request, "blog_detail", context)
+    return render(request, "blog_detail.html", context)
